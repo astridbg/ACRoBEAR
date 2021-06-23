@@ -2,7 +2,7 @@ import numpy as np
 import xarray as xr
 import matplotlib.pyplot as plt
 from groupbySeason import groupbySeason, groupManybySeason
-plt.rcParams.update({'font.size': 12})
+plt.rcParams.update({'font.size': 20})
 
 preInd = xr.open_dataset("../outputdata/preInd.nc")
 plus1 = xr.open_dataset("../outputdata/plus1.nc")
@@ -18,7 +18,34 @@ name = ["Alaska", "Canada", "Fennoscandia", "West Siberia", "East Siberia"]
 
 
 MAM, JJA, SON, DJF = groupManybySeason([preInd, plus1, plus2, plus3, plus4])
-print(DJF)
-print(DJF.GWL)
-print(DJF.isel(GWL=0))
+seasons = [MAM, JJA, SON, DJF]
+season_longname = ["Spring", "Summer", "Autumn", "Winter"]
+season_shortname = ["MAM", "JJA", "SON", "DJF"]
+
+colors = ["black","cyan","green","yellow","red"]
+labels = ["Preindustrial",r"+1$^{\circ}$C",r"+2$^{\circ}$C",r"+3$^{\circ}$C","+4$^{\circ}$C"]
+
+bins = np.arange(-50,31,1)
+
+for i in range(4):
+
+    for region in range(len(fname)):
+
+        fig = plt.figure(figsize=(10,9))
+        plt.title("PDF of daily temperature in "+name[region])
+
+        for l in range(len(MAM.GWL)):
+   
+            gwl_tas = np.array(seasons[i].tas.isel(GWL=l,region=region)).flatten() - 273.15
+           # plt.hist(gwl_tas,bins=150,histtype="stepfilled",alpha=0.5,color=colors[l],density=True) 
+            plt.hist(gwl_tas,bins=bins,histtype="step",linewidth=2,color=colors[l],label=labels[l],density=True)
+
+            plt.xlabel(r"Daily temperature [$^{\circ}$C]")
+            plt.ylabel("PDF, "+season_longname[i]+" ("+season_shortname[i]+")")
+            plt.grid()
+            plt.legend(loc="upper left")
+            plt.xlim([-50,30])
+
+            fig.tight_layout()
+            fig.savefig("../figures/pdf_tas_"+fname[region]+"_"+season_shortname[i]+".png")
 

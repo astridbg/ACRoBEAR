@@ -5,27 +5,17 @@ import netCDF4 as nc
 from makeRegion import makeRegion
 from makeAreagrid import makeAreagrid
 
-lf = xr.open_dataset("../regions/landfrac_MPI-ESM1-2.nc")
+lf = xr.open_dataset("../regions/landfrac_binary_MPI-ESM1-2.nc")
 lon_values = lf.lon
 lat_values = lf.lat
-landfrac = lf.landfrac[0] * 0.0001
+landfrac = lf.landfrac# * 0.0001
+land = makeAreagrid(lon_values, lat_values, landfrac)
 
-r_alaska = makeRegion(lon_values, lat_values, [200,230,58,72])  # Alaska
-r_canada = makeRegion(lon_values, lat_values, [235,280,52,68])  # Canada
-r_fscand = makeRegion(lon_values, lat_values, [4,35,57,72])     # Fennoscandia
-r_wsib = makeRegion(lon_values, lat_values, [45,95,57,72])      # Western Siberia
-r_esib = makeRegion(lon_values, lat_values, [95,145,57,72])     # Eastern Siberia
-
-alaska = makeAreagrid(lon_values, lat_values, landfrac*r_alaska)
-canada = makeAreagrid(lon_values, lat_values, landfrac*r_canada)
-fscand = makeAreagrid(lon_values, lat_values, landfrac*r_fscand)
-wsib = makeAreagrid(lon_values, lat_values, landfrac*r_wsib)
-esib = makeAreagrid(lon_values, lat_values, landfrac*r_esib)
-
-region_list = [alaska, canada, fscand, wsib, esib]
-nreg = len(region_list)
+regAreagrid = xr.open_dataset("../regions/regAreagrid_all.nc")
+nreg = len(regAreagrid.region)
 
 print("Regions found")
+print(regAreagrid.isel(region=-1))
 
 gmst = xr.open_dataset("../outputdata/gmst.nc")
 
@@ -66,14 +56,14 @@ histssp5 = xr.open_dataset("../outputdata/histssp5_allmembs.nc")
 
 fns = ['preInd','plus1','plus2', 'plus3','plus4']
 
-for l in range(3,5):
+for l in range(5):
 
-    fn = "../outputdata/"+fns[l]+".nc"
+    fn = "../outputdata/"+fns[l]+"_allreg.nc"
     ds = nc.Dataset(fn, 'w', format='NETCDF4')
 
     dayofyear = ds.createDimension('dayofyear', 365)
     year = ds.createDimension('year', 200)
-    region = ds.createDimension('region', 5)
+    region = ds.createDimension('region', nreg)
 
     daysofyear = ds.createVariable('dayofyear', 'i4', ('dayofyear',))
     years = ds.createVariable('year', 'i4', ('year',))
@@ -81,14 +71,15 @@ for l in range(3,5):
 
     daysofyear[:] = np.arange(1,366,1)
     years[:] = np.arange(1,201,1)
-    regions[:] = np.arange(1,6,1)
+    regions[:] = np.arange(1,nreg+1,1)
 
     value = ds.createVariable('tas', 'f4', ('dayofyear','year','region'))
     value.units = 'K'
 
-    for k in range(5):
-
-        Region = region_list[k]
+    for k in range(nreg):
+        
+        
+        Region = regAreagrid.mask.isel(region=k)
     
         for i in range(nmemb):
 
