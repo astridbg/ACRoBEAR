@@ -5,9 +5,6 @@ import netCDF4 as nc
 from makeRegion import makeRegion
 from makeAreagrid import makeAreagrid
 
-#lf = xr.open_dataset("../regions/landfrac_binary_MPI-ESM1-2.nc")
-#lon_values = lf.lon
-#lat_values = lf.lat
 
 regAreagrid = xr.open_dataset("../regions/regAreagrid_all.nc")
 nreg = len(regAreagrid.region)
@@ -16,7 +13,7 @@ print("Regions found")
 
 gmst = xr.open_dataset("../outputdata/gmst.nc")
 
-Tlevels = [1, 2, 3, 4]
+Tlevels = [1, 1.5, 2, 3, 4]
 nTlev = len(Tlevels)
 nmemb = len(gmst.ensmemb)
 
@@ -49,9 +46,12 @@ for i in range(nmemb):
 
 print("Warming levels found")
 
-histssp5 = xr.open_dataset("../outputdata/histssp5_allmembs.nc")
+model_scenario = xr.open_dataset("../outputdata/histssp5_allmembs.nc")
+data = model_scenario.tas
+var_name = 'tas'
+var_unit = 'K'
 
-fns = ['preInd','plus1','plus2', 'plus3','plus4']
+fns = ['preInd','plus1','plus1_5','plus2', 'plus3','plus4']
 
 for l in range(3,5):
 
@@ -70,8 +70,8 @@ for l in range(3,5):
     years[:] = np.arange(1,201,1)
     regions[:] = np.arange(1,nreg+1,1)
 
-    value = ds.createVariable('tas', 'f4', ('dayofyear','year','region'))
-    value.units = 'K'
+    value = ds.createVariable(var_name, 'f4', ('dayofyear','year','region'))
+    value.units = var_unit
 
     for k in range(nreg):
         
@@ -82,18 +82,18 @@ for l in range(3,5):
             start = math.floor(warmlvls[i,l,0]*365.25)
             stop = math.floor(warmlvls[i,l,1]*365.25)
 
-            gwl_tas = histssp5.tas.isel(time=slice(start,stop),memb=i)
+            gwl_data = data.isel(time=slice(start,stop),memb=i)
             
             for yr in range(20):
 
-                print("Region number:", k+1,", Ensemble member: ", i+1, ", Year: ",yr+1)
+                print("Global warming level: ",str(Tlevels[l])," degrees C, Region number:", k+1,", Ensemble member: ", i+1, ", Year: ",yr+1)
 
                 for day in range(365):
 
                     gwlyear_idx = i*20+yr
                     time_idx = math.floor(yr*365.25)+day
 
-                    value[day,gwlyear_idx,k] = np.nansum(gwl_tas[time_idx,:,:]*Region) / np.nansum(Region)
+                    value[day,gwlyear_idx,k] = np.nansum(gwl_data[time_idx,:,:]*Region) / np.nansum(Region)
             
            # print("Start: ",np.array(histssp5.time[start]),", Stop: ",np.array(histssp5.time[stop]), ", Last day: ", np.array(histssp5.time[start+time_idx]))
    
