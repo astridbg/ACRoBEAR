@@ -25,11 +25,11 @@ season_shortname = ["MAM", "JJA", "SON", "DJF"]
 colors = ["black","cyan","green","yellow","red"]
 labels = ["Preindustrial",r"+1$^{\circ}$C",r"+2$^{\circ}$C",r"+3$^{\circ}$C","+4$^{\circ}$C"]
 
-bins = np.arange(-50,31,1)
+bins = np.arange(-50,32,2)
 
 for i in range(4):
 
-    for region in range(len(fname)):
+    for region in range(5):
 
         fig = plt.figure(figsize=(10,9))
         plt.title("PDF of daily temperature in "+name[region])
@@ -37,9 +37,11 @@ for i in range(4):
         for l in range(len(MAM.GWL)):
    
             gwl_tas = np.array(seasons[i].tas.isel(GWL=l,region=region)).flatten() - 273.15
-           # plt.hist(gwl_tas,bins=150,histtype="stepfilled",alpha=0.5,color=colors[l],density=True) 
-            plt.hist(gwl_tas,bins=bins,histtype="step",linewidth=2,color=colors[l],label=labels[l],density=True)
-
+                
+            n,x,_ = plt.hist(gwl_tas,bins=bins,histtype=u"step",density=True,color="white")
+            bin_centers = 0.5*(x[1:]+x[:-1])
+            plt.plot(bin_centers,n,linewidth=2,color=colors[l],label=labels[l])
+            
             plt.xlabel(r"Daily temperature [$^{\circ}$C]")
             plt.ylabel("PDF, "+season_longname[i]+" ("+season_shortname[i]+")")
             plt.grid()

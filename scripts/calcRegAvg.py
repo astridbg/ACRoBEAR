@@ -5,17 +5,14 @@ import netCDF4 as nc
 from makeRegion import makeRegion
 from makeAreagrid import makeAreagrid
 
-lf = xr.open_dataset("../regions/landfrac_binary_MPI-ESM1-2.nc")
-lon_values = lf.lon
-lat_values = lf.lat
-landfrac = lf.landfrac# * 0.0001
-land = makeAreagrid(lon_values, lat_values, landfrac)
+#lf = xr.open_dataset("../regions/landfrac_binary_MPI-ESM1-2.nc")
+#lon_values = lf.lon
+#lat_values = lf.lat
 
 regAreagrid = xr.open_dataset("../regions/regAreagrid_all.nc")
 nreg = len(regAreagrid.region)
 
 print("Regions found")
-print(regAreagrid.isel(region=-1))
 
 gmst = xr.open_dataset("../outputdata/gmst.nc")
 
@@ -56,7 +53,7 @@ histssp5 = xr.open_dataset("../outputdata/histssp5_allmembs.nc")
 
 fns = ['preInd','plus1','plus2', 'plus3','plus4']
 
-for l in range(5):
+for l in range(3,5):
 
     fn = "../outputdata/"+fns[l]+"_allreg.nc"
     ds = nc.Dataset(fn, 'w', format='NETCDF4')
@@ -78,8 +75,7 @@ for l in range(5):
 
     for k in range(nreg):
         
-        
-        Region = regAreagrid.mask.isel(region=k)
+        Region = np.array(regAreagrid.mask.isel(region=k))
     
         for i in range(nmemb):
 
