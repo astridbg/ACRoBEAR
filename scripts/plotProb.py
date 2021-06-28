@@ -48,6 +48,7 @@ var_xlim = [[-50,50]]
 bins = np.arange(-50,52,2)
 
 fig = plt.figure(figsize=(30,20))
+figshape = 230
 
 for var in range (len(var_shortname)):
 
@@ -61,7 +62,7 @@ for var in range (len(var_shortname)):
 
             for region in region_list:
 
-                fig.add_subplot(320+f)
+                fig.add_subplot(figshape+f)
                 plt.title(reg_longname[region])
 
                 for l in range(len(MAM.GWL)):
