@@ -1,5 +1,5 @@
 import numpy as np
-#HEII!!!!
+
 def gv3(field, lon_values, lat_values, mf=[]):
 
     nlon = len(lon_values)

@@ -1,27 +1,31 @@
 import numpy as np
 import xarray as xr
 
-fn = "histssp5_allmembs.nc"
+var_name = "ts"
+scenario = "ssp585"
+
+fn = var_name+"_historical_"+scenario+"_rAll.nc"
 
 print("Ensemble member 1:")
 
-historical = xr.open_dataset("../CMIP6/tas_day_MPI-ESM1-2-LR_historical_r1i1p1f1_18500101-20141231.nc")
-ssp585 = xr.open_dataset("../CMIP6/tas_day_MPI-ESM1-2-LR_ssp585_r1i1p1f1_20150101-21001231.nc")
-ds = xr.concat([historical, ssp585], "time")
+historical = xr.open_dataset("../CMIP6/"+var_name+"_Eday_MPI-ESM1-2-LR_historical_r1i1p1f1_18500101-20141231.nc")
+ssp = xr.open_dataset("../CMIP6/"+var_name+"_Eday_MPI-ESM1-2-LR_"+scenario+"_r1i1p1f1_20150101-21001231.nc")
+
+ds = xr.concat([historical, ssp], "time")
 
 
-if len(np.where(np.isfinite(ds.tas)==False)[0]) != 0:
+if len(np.where(np.isfinite(ds[var_name])==False)[0]) != 0:
 
-    ds.tas[np.where(np.isfinite(ds.tas)==False)] = np.nan
+    ds[var_name][np.where(np.isfinite(ds[var_name])==False)] = np.nan
         
-    print(len(np.where(np.isfinite(ds.tas)==False)[0])," missing values found!")
+    print(len(np.where(np.isfinite(ds[var_name])==False)[0])," missing values found!")
 
     
-elif len(np.where(abs(ds.tas) >= 1e20)[0]) != 0:
+elif len(np.where(abs(ds[var_name]) >= 1e20)[0]) != 0:
         
-    ds.tas[np.where(abs(ds.tas) >= 1e20)] = np.nan
+    ds[var_name][np.where(abs(ds[var_name]) >= 1e20)] = np.nan
 
-    print(len(np.where(abs(ds.tas) >= 1e20)[0]), " missing values found!")
+    print(len(np.where(abs(ds[var_name]) >= 1e20)[0]), " missing values found!")
 
 else:
 
@@ -32,22 +36,22 @@ for i in range(2,11):
 
     print("Ensemble member ",i,":")
 
-    historical = xr.open_dataset("../CMIP6/tas_day_MPI-ESM1-2-LR_historical_r"+str(i)+"i1p1f1_18500101-20141231.nc")
-    ssp585 = xr.open_dataset("../CMIP6/tas_day_MPI-ESM1-2-LR_ssp585_r"+str(i)+"i1p1f1_20150101-21001231.nc")
-    comb = xr.concat([historical, ssp585], "time")
+    historical = xr.open_dataset("../CMIP6/"+var_name+"_Eday_MPI-ESM1-2-LR_historical_r"+str(i)+"i1p1f1_18500101-20141231.nc")
+    ssp = xr.open_dataset("../CMIP6/"+var_name+"_Eday_MPI-ESM1-2-LR_"+scenario+"_r"+str(i)+"i1p1f1_20150101-21001231.nc")
+    comb = xr.concat([historical, ssp], "time")
 
 
-    if len(np.where(np.isfinite(ds.tas)==False)[0]) != 0:
+    if len(np.where(np.isfinite(ds[var_name])==False)[0]) != 0:
 
-        comb.tas[np.where(np.isfinite(ds.tas)==False)] = np.nan
+        comb[var_name][np.where(np.isfinite(ds[var_name])==False)] = np.nan
         
-        print(len(np.where(np.isfinite(ds.tas)==False)[0])," missing values found!")
+        print(len(np.where(np.isfinite(ds[var_name])==False)[0])," missing values found!")
     
-    elif len(np.where(abs(ds.tas) >= 1e20)[0]) != 0:
+    elif len(np.where(abs(ds[var_name]) >= 1e20)[0]) != 0:
         
-        comb.tas[np.where(abs(ds.tas) >= 1e20)] = np.nan
+        comb[var_name][np.where(abs(ds[var_name]) >= 1e20)] = np.nan
 
-        print(len(np.where(abs(ds.tas) >= 1e20)[0]), " missing values found!")
+        print(len(np.where(abs(ds[var_name]) >= 1e20)[0]), " missing values found!")
 
     else:
 
@@ -58,5 +62,5 @@ for i in range(2,11):
 ds.to_netcdf("../outputdata/"+fn, "w",format="NETCDF4")
 
 
-print(ds.time)
-print(ds.memb)
+print("New dataset time:\n",ds.time)
+print("New dataset ensemble members:\n",ds.memb)

@@ -13,11 +13,11 @@ print("Regions found")
 
 gmst = xr.open_dataset("../outputdata/gmst.nc")
 
-Tlevels = [1, 1.5, 2, 3, 4]
+Tlevels = [0, 1, 1.5, 2, 3, 4]
 nTlev = len(Tlevels)
 nmemb = len(gmst.ensmemb)
 
-warmlvls = np.zeros((nmemb, nTlev+1, 2))
+warmlvls = np.zeros((nmemb, nTlev, 2))
 
 def find_nearest_index(array, value):
     
@@ -37,25 +37,26 @@ for i in range(nmemb):
 
     twentyyrmean = deltaT.rolling(time=20,center=True).mean()
  
-    for l in range(len(Tlevels)):
+    for l in range(1,len(Tlevels)):
 
         idx = find_nearest_index(twentyyrmean,Tlevels[l])
 
-        warmlvls[i,l+1,0] = idx - 10
-        warmlvls[i,l+1,1] = idx + 10
+        warmlvls[i,l,0] = idx - 10
+        warmlvls[i,l,1] = idx + 10
 
 print("Warming levels found")
 
-model_scenario = xr.open_dataset("../outputdata/histssp5_allmembs.nc")
-data = model_scenario.tas
-var_name = 'tas'
-var_unit = 'K'
+var_name = 'pr'
+var_unit = 'kg m-2 s-1'
+scenario = 'ssp585'
+dataset = xr.open_dataset("../outputdata/"+var_name+"_historical_"+scenario+"_rAll.nc")
+da = dataset[var_name]
 
-fns = ['preInd','plus1','plus1_5','plus2', 'plus3','plus4']
+fns = ['pi','plus1','plus1-5','plus2', 'plus3','plus4']
 
-for l in range(3,5):
+for l in range(5,nTlev):
 
-    fn = "../outputdata/"+fns[l]+"_allreg.nc"
+    fn = "../outputdata/"+fns[l]+"_"+var_name+"_regAll.nc"
     ds = nc.Dataset(fn, 'w', format='NETCDF4')
 
     dayofyear = ds.createDimension('dayofyear', 365)
@@ -82,11 +83,11 @@ for l in range(3,5):
             start = math.floor(warmlvls[i,l,0]*365.25)
             stop = math.floor(warmlvls[i,l,1]*365.25)
 
-            gwl_data = data.isel(time=slice(start,stop),memb=i)
+            gwl_data = da.isel(time=slice(start,stop),memb=i)
             
             for yr in range(20):
 
-                print("Global warming level: ",str(Tlevels[l])," degrees C, Region number:", k+1,", Ensemble member: ", i+1, ", Year: ",yr+1)
+                print("Global warming level:",str(Tlevels[l]),"degrees C,  Region number:", k+1,", Ensemble member: ", i+1, ", Year: ",yr+1)
 
                 for day in range(365):
 
