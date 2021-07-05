@@ -60,5 +60,5 @@ for i in range(len(gmst.ensmemb)):
 plt.ylabel("Surface temperature change")
 plt.grid()
 plt.legend(loc="upper left")
-plt.savefig("../figures/gmst/gmst_hlines.png")
+plt.savefig("../figures/GMST/gmst_hlines.png")
 
