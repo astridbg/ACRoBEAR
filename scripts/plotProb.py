@@ -3,12 +3,14 @@ import xarray as xr
 import matplotlib.pyplot as plt
 import seaborn as sns
 from groupbySeason import groupbySeason, groupManybySeason
-plt.rcParams.update({'font.size': 25})
+plt.rcParams.update({'font.size': 28})
 
 var_shortname = ['tas','ts','pr']
 var_longname = ['temperature','skin temperature','precipitation']
 var_unit = ['$^{\circ}$C','$^{\circ}$C','mm d$^{-1}$']
-var_xlim = [[-50,50],[-50,50],[0,10]]
+var_xlim = [[[-50,50],[-40,40],[-20,50]],[[-50,50],[-40,40],[-20,50]],[[0,10],[0,10],[0,10]]]
+print("var_xlim:",np.shape(var_xlim))
+var_binsize = [2, 2, 0.5]
 var_bins = [np.arange(-50,52,2),np.arange(-50,52,2),np.arange(0,21,0.5)]
 
 for var in range(3):
@@ -42,8 +44,10 @@ for var in range(3):
     reg_shortname = ["alaska","canada","fscand","wsib","esib","us","ea","eu","arc","afr","sam","sane","china","india","land"]
     reg_longname = ["Alaska", "Canada", "Fennoscandia", "West Siberia", "East Siberia","USA","East Asia","Europe","Arctic","Africa","South America","Scandinavia","China", "India","Global land areas"]
 
-    region_lists = [[0,1,2,3,4],[14,9,10,5,8],[6,13,12,7,11]]
-    regions_names = ["boreal","aframarc","eurasia"]
+   # region_lists = [[0,1,2,3,4],[14,9,10,5,8],[6,13,12,7,11]]
+    region_lists = [[0,1,2,3,4],[7,11,5,8,14],[6,13,12,9,10]]
+   # region_names = ["boreal", "aframarc", "eurasia"] 
+    regions_names = ["boreal","euusarc","afrea"]
 
     MAM, JJA, SON, DJF = groupManybySeason([preInd, plus1, plus1_5, plus2, plus3, plus4])
     seasons = [MAM, JJA, SON, DJF]
@@ -54,7 +58,8 @@ for var in range(3):
     colors = sns.color_palette("colorblind")[:6]
     labels = ["Preindustrial",r"+1$^{\circ}$C",r"+1.5$^{\circ}$C",r"+2$^{\circ}$C",r"+3$^{\circ}$C","+4$^{\circ}$C"]
 
-    bins = var_bins[var]
+    xlims = var_xlim[var]
+    print("xlims:",np.shape(xlims))
 
     fig = plt.figure(figsize=(30,20))
     figshape = 230
@@ -64,8 +69,11 @@ for var in range(3):
         for k in range(3):
 
             region_list = region_lists[k]
-            fig.suptitle("PDFs of daily "+var_longname[var]+" in "+season_longname[i]+" ("+season_shortname[i]+")")
+            fig.suptitle("PDFs of daily "+var_longname[var]+" in "+season_longname[i]+" ("+season_shortname[i]+")", fontsize=32)
             f = 1
+            
+            print(xlims[k])
+            bins = np.arange(xlims[k][0],xlims[k][-1]+var_binsize[var],var_binsize[var])
 
             for region in region_list:
 
@@ -85,16 +93,16 @@ for var in range(3):
                         plt.plot(bin_centers,n,linewidth=2,color=colors[l])
                 
                     area = sum((bins[1]-bins[0])*n)
-                    print("Area under graph: ", area)
+                    #print("Area under graph: ", area)
 
                 plt.xlabel(r"Daily "+var_longname[var]+" ["+var_unit[var]+"]")
                # plt.ylabel("PDF, "+season_longname[i]+" ("+season_shortname[i]+")")
-                plt.xlim(var_xlim[var])
+                plt.xlim(xlims[k])
 
                 f += 1
 
 
-            fig.legend(bbox_to_anchor=(0.5, 0, 0.4, 0.5))
+            fig.legend(bbox_to_anchor=(0.5, -0.05, 0.3, 0.5))
             fig.tight_layout()
 
             if k == 0:
