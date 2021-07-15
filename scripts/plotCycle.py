@@ -1,89 +1,58 @@
 import numpy as np
 import xarray as xr
 import matplotlib.pyplot as plt
-plt.rcParams.update({'font.size': 12})
+import seaborn as sns
+from getGWLdata import getGWLdata
+plt.rcParams.update({'font.size': 20})
 
-var_shortname = ['tas','pr']
-var_longname = ['Surface temperature','Precipitation']
-var_unit = ['$^{\circ}$C','mm d$^{-1}$']
+model = "CanESM5"
+scenario = "585"
+GWLs = [0, 1, 1.5, 2, 3, 4]
+
+var_shortname = ['tas','ts','pr','abswind','mrso']
+var_longname = ['Surface temperature','Skin temperature','Precipitation','Windspeed','Soil moisture']
+var_unit = ['$^{\circ}$C','$^{\circ}$C','mm d$^{-1}$','m s$^{-1}$','kg m$^{-2}$']
+
+reg_shortname = ["alaska","canada","fscand","wsib","esib","us","ea","eu","arc","afr","sam","sane","china","india","land"]
+reg_longname = ["Alaska", "Canada", "Fennoscandia", "West Siberia", "East Siberia","the USA","East Asia","Europe","the Arctic","Africa","South America","Sane","China", "India","global land areas"]
+
+colors = sns.color_palette("colorblind")[:6]
+labels = ["Preindustrial",r"+1$^{\circ}$C",r"+1.5$^{\circ}$C",r"+2$^{\circ}$C",r"+3$^{\circ}$C","+4$^{\circ}$C"]
 
 for var in range(2):
-    preInd = xr.open_dataset("../outputdata/pi_"+var_shortname[var]+"_regAll.nc")
-    plus1 = xr.open_dataset("../outputdata/plus1_"+var_shortname[var]+"_regAll.nc")
-    plus1_5 = xr.open_dataset("../outputdata/plus1-5_"+var_shortname[var]+"_regAll.nc")
-    plus2 = xr.open_dataset("../outputdata/plus2_"+var_shortname[var]+"_regAll.nc")
-    plus3 = xr.open_dataset("../outputdata/plus3_"+var_shortname[var]+"_regAll.nc")
-    plus4 = xr.open_dataset("../outputdata/plus4_"+var_shortname[var]+"_regAll.nc")
+    
+    GWL_data = getGWLdata(var_shortname[var], model,scenario, GWLs)
+    
+    dayofyear = GWL_data[0].dayofyear
+    nreg = len(GWL_data[0].region)
 
-    dayofyear = preInd.dayofyear
-    nreg = len(preInd.region)
-
-    if var == 0:
-        preInd[var_shortname[var]] -= 273.15
-        plus1[var_shortname[var]] -= 273.15
-        plus1_5[var_shortname[var]] -= 273.15
-        plus2[var_shortname[var]] -= 273.15
-        plus3[var_shortname[var]] -= 273.15
-        plus4[var_shortname[var]] -= 273.15
-
-    elif var == 1:
-        preInd[var_shortname[var]] *= 86400
-        plus1[var_shortname[var]] *= 86400
-        plus1_5[var_shortname[var]] *= 86400
-        plus2[var_shortname[var]] *= 86400
-        plus3[var_shortname[var]] *= 86400
-        plus4[var_shortname[var]] *= 86400
-
-
-    pi_annavg = preInd[var_shortname[var]].mean("year")
-    pi_min = preInd[var_shortname[var]].min("year")
-    pi_max = preInd[var_shortname[var]].max("year")
-
-    p2_annavg = plus2[var_shortname[var]].mean("year")
-    p2_min = plus2[var_shortname[var]].min("year")
-    p2_max = plus2[var_shortname[var]].max("year")
-
-    #pi_annspread = preInd[var_shortname[var]].std("year")
-    #p2_annspread = plus2[var_shortname[var]].std("year")
-
-    fname = ["alaska","canada","fscand","wsib","esib","us","ea","eu","arc","afr","sam","sane","china","india","land"]
-    name = ["Alaska", "Canada", "Fennoscandia", "West Siberia", "East Siberia","the USA","East Asia","Europe","the Arctic","Africa","South America","Sane","China", "India","global land areas"]
-
-    fig = plt.figure(figsize=(10,5))
-
+    fig = plt.figure(figsize=(20,10))
+    
     for i in range(nreg):
 
-        fig.suptitle("Mean and spread of annual cycle of "+name[i])
-    
+        fig.suptitle("Mean and spread of annual cycle of "+reg_longname[i])
+        
         fig.add_subplot(121)
         plt.hlines(y=0,  xmin=0, xmax=365, linestyle="--",color="grey")
-        plt.scatter(dayofyear,pi_annavg.isel(region=i),s=5,color="black",label="Preindustrial")
-        plt.scatter(dayofyear,pi_min.isel(region=i),s=1,color="black")
-        plt.scatter(dayofyear,pi_max.isel(region=i),s=1,color="black")
-        #plt.scatter(dayofyear,pi_annavg.isel(region=i)+pi_annspread.isel(region=i),s=1, color="black")
-        #plt.scatter(dayofyear,pi_annavg.isel(region=i)-pi_annspread.isel(region=i),s=1,color="black")
-        plt.scatter(dayofyear,p2_annavg.isel(region=i),s=5,color="green",label=r"+2$^{\circ}$C")
-        plt.scatter(dayofyear,p2_min.isel(region=i),s=1,color="green")
-        plt.scatter(dayofyear,p2_max.isel(region=i),s=1,color="green")
-        #plt.scatter(dayofyear,p2_annavg.isel(region=i)+p2_annspread.isel(region=i),s=1, color="green")
-        #plt.scatter(dayofyear,p2_annavg.isel(region=i)-p2_annspread.isel(region=i),s=1,color="green")
+        for l in [0, 3]:
+            plt.scatter(dayofyear,GWL_data[l].mean("year").isel(region=i),s=15,color=colors[l],label=labels[l])
+            plt.scatter(dayofyear,GWL_data[l].min("year").isel(region=i),s=5,color=colors[l])
+            plt.scatter(dayofyear,GWL_data[l].max("year").isel(region=i),s=5,color=colors[l])
+            #plt.scatter(dayofyear,GWL_data[l].mean("year").isel(region=i)+GWL_data[l].std("year").isel(region=i),s=1, color=colors[l])
+            #plt.scatter(dayofyear,GWL_data[l].mean("year").isel(region=i)-GWL_data[l].std("year").isel(region=i),s=1,color=colors[l])
         plt.xlabel("Day")
         plt.xticks([100, 200, 300], ['100','200','300'])
         plt.ylabel(var_longname[var]+" ["+var_unit[var]+"]")
-        #plt.legend(loc="lower right")
         plt.grid()
     
         fig.add_subplot(122)
-        plt.scatter(dayofyear,pi_annavg.isel(region=i)-pi_annavg.isel(region=i),s=5,color="black",label="Preindustrial")
-        plt.scatter(dayofyear,pi_min.isel(region=i)-pi_annavg.isel(region=i),s=1,color="black")
-        plt.scatter(dayofyear,pi_max.isel(region=i)-pi_annavg.isel(region=i),s=1,color="black")
-        #plt.scatter(dayofyear,pi_annspread.isel(region=i),s=1, color="black")
-        #plt.scatter(dayofyear,-pi_annspread.isel(region=i),s=1,color="black")
-        plt.scatter(dayofyear,p2_annavg.isel(region=i)-pi_annavg.isel(region=i),s=5,color="green",label=r"+2$^{\circ}$C")
-        plt.scatter(dayofyear,p2_min.isel(region=i)-pi_annavg.isel(region=i),s=1,color="green")
-        plt.scatter(dayofyear,p2_max.isel(region=i)-pi_annavg.isel(region=i),s=1,color="green")
-        #plt.scatter(dayofyear,p2_annavg.isel(region=i)-pi_annavg.isel(region=i)+p2_annspread.isel(region=i),s=1, color="green")
-        #plt.scatter(dayofyear,p2_annavg.isel(region=i)-pi_annavg.isel(region=i)-p2_annspread.isel(region=i),s=1,color="green")
+        baseline = GWL_data[0].mean("year").isel(region=i)
+        for l in [0, 3]:
+            plt.scatter(dayofyear,GWL_data[l].mean("year").isel(region=i)-baseline,s=15,color=colors[l],label=labels[l])
+            plt.scatter(dayofyear,GWL_data[l].min("year").isel(region=i)-baseline,s=5,color=colors[l])
+            plt.scatter(dayofyear,GWL_data[l].max("year").isel(region=i)-baseline,s=5,color=colors[l])
+            #plt.scatter(dayofyear,GWL_data[l].mean("year").isel(region=i)-baseline+GWL_data[l].std("year").isel(region=i),s=1, color=colors[l])
+            #plt.scatter(dayofyear,GWL_data[l].mean("year").isel(region=i)-baseline-GWL_data[0].mean("year").isel(region=i),s=1,color=colors[l]) 
         plt.xlabel("Day")
         plt.xticks([100, 200, 300], ['100','200','300'])
         plt.ylabel(var_longname[var]+" change"+" ["+var_unit[var]+"]")
@@ -93,8 +62,8 @@ for var in range(2):
 
         fig.tight_layout()
         if i < 5:
-            fig.savefig("../figures/ACRoBEAR/annualCycles/cycle_"+var_shortname[var]+"_"+fname[i]+".png")
+            fig.savefig("../figures/ACRoBEAR/annualCycles/MeanMinMaxCycles/cycle_"+model+"_ssp"+scenario+"_"+var_shortname[var]+"_"+reg_shortname[i]+".png")
         else:
-            fig.savefig("../figures/OtherRegions/annualCycles/cycle_"+var_shortname[var]+"_"+fname[i]+".png")
+            fig.savefig("../figures/OtherRegions/annualCycles/MeanMinMaxCycles/cycle_"+model+"_ssp"+scenario+"_"+var_shortname[var]+"_"+reg_shortname[i]+".png")
 
         plt.clf()
