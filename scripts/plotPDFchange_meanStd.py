@@ -4,9 +4,14 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 plt.rcParams.update({'font.size':30})
 
-model = "CanESM5"
-scenario = "585"
-GWLs = [0, 1, 1.5, 2, 3, 4]
+#-Variable specifications----------------------------------------------------------------
+
+model = "MPI-ESM1-2-LR"         # Which model are you using?
+scenario = "585"                # Which shared socio-economic pathway are you using?
+GWLs = [0, 1, 1.5, 2, 3, 4]     # Which global warming levels are you using?
+var_list = [3]                  # Which indices are you using (indices of var_shortname)?
+
+#----------------------------------------------------------------------------------------
 
 var_shortname = ['tas','ts','pr','abswind','mrso']
 var_longname = ['temperature','skin temperature','precipitation','windspeed','soil moisture']
@@ -26,11 +31,12 @@ season_shortname = ["MAM", "JJA", "SON", "DJF"]
 colors = sns.color_palette("colorblind")[:6]
 labels = ["Preindustrial",r"+1$^{\circ}$C",r"+1.5$^{\circ}$C",r"+2$^{\circ}$C",r"+3$^{\circ}$C","+4$^{\circ}$C"]
 
+#----------------------------------------------------------------------------------------
 
 fig = plt.figure(figsize=(23,18))
 markersize = 300
 
-for i in range(5):
+for i in var_list:
 
     ds = xr.open_dataset("../outputdata/pdfchange_"+var_shortname[i]+"_"+model+"_ssp"+scenario+".nc")
 

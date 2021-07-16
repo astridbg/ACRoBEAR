@@ -8,15 +8,15 @@ from extremeIndices import CDD, TX90p, WSDI
 
 #-Variable specifications----------------------------------------------------------------
 
-model = "CanESM1"               # Which model are you using?
+model = "MPI-ESM1-2-LR"         # Which model are you using?
 scenario = "585"                # Which shared socio-economic pathway are you using?
 GWLs = [0, 1, 1.5, 2, 3, 4]     # Which global warming levels are you using?
-var_list = [0]                  # Which variables (index in var_shortname) are you using?
+var_list = [5,6,7]              # Which variables (index in var_shortname) are you using?
 
 #----------------------------------------------------------------------------------------
 
 var_shortname = ['tas','ts','pr','abswind','mrso','CDD','TX90p','WSDI']
-var_binlims = [[-50,50],[-50,50],[0,10],[0,8],[200,1750]]
+var_binlims = [[-50,50],[-50,50],[0,10],[0,8],[200,1750],[0,80],[0,75],[0,45]]
 var_binsize = [2, 2, 0.5,0.4,10,1,2,1]
 
 reg_shortname = ["alaska","canada","fscand","wsib","esib","us","ea","eu","arc","afr","sam","sane","china","india","land"]

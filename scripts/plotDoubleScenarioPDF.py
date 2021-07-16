@@ -6,13 +6,21 @@ from groupbySeason import groupbySeason, groupManybySeason
 from getGWLdata import getGWLdata
 plt.rcParams.update({'font.size': 28})
 
-model1 = "CanESM5"
-model2 = "CanESM5"
-scenario1 = "126"
-scenario2 = "126"
-GWLs = [0, 1, 1.5]
-after2070_1 = True
-after2070_2 = False
+# This is a program to plot variable probability functions from 
+# two different scenarios or two different models together. 
+
+#-Variable specifications-----------------------------------------------------
+
+model1 = "CanESM5"      # Which model are you using for the first scenario?
+model2 = "CanESM5"      # Which model are you using for the second scenario?
+scenario1 = "126"       # What is the first scenario?
+scenario2 = "126"       # What is the second scenario?
+GWLs = [0, 1, 1.5]      # Which global warming levels are you using?
+after2070_1 = True      # Is the first scenario after2070 for GWL 1.5?
+after2070_2 = False     # Is the second scenario after2070 for GWL 1.5?    
+var_list = [0]          # Which variables are you using?
+
+#-----------------------------------------------------------------------------
 
 var_shortname = ['tas','ts','pr','abswind','mrso']
 var_longname = ['temperature','skin temperature','precipitation','windspeed','soil moisture']
@@ -33,8 +41,9 @@ season_shortname = ["MAM", "JJA", "SON", "DJF"]
 colors = sns.color_palette("colorblind")[:6]
 labels = ["Preindustrial",r"+1$^{\circ}$C",r"+1.5$^{\circ}$C",r"+2$^{\circ}$C",r"+3$^{\circ}$C","+4$^{\circ}$C"]
 
+#-------------------------------------------------------------------------------
 
-for var in range(len(var_shortname)):
+for var in var_list:
     
     if after2070_1 == True:
         GWL_data1 = getGWLdata(var_shortname[var], model1, scenario1, GWLs,after2070=True)

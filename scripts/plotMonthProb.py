@@ -6,9 +6,18 @@ from groupbySeason import groupbySeason, groupManybySeason
 from getGWLdata import getGWLdata
 plt.rcParams.update({'font.size': 20})
 
-model = "CanESM5"
-scenario = "585"
-GWLs = [0, 1, 1.5, 2, 3, 4]
+# This is program that plots probability density function for a given variable
+# for either spring or autumn regions and divides them up into months. 
+
+#-Variable specifications-----------------------------------------------------------------------------
+
+model = "MPI-ESM1-2-LR"         # Which model are you using?
+scenario = "585"                # Which shared socio-economic pathway are you using?
+GWLs = [0, 1, 1.5, 2, 3, 4]     # Which global warming levels are you using?
+spring_regions = [0,1,2,3,4]    # Which regions are you looking at in spring (index of reg_shortname)?
+autumn_regions = [0,1,2,3,4]    # Which regions are you looking at in autumn (index of reg_shortname)?
+
+#------------------------------------------------------------------------------------------------------
 
 var_shortname = ['tas','ts','pr','abswind','mrso']
 var_longname = ['temperature','skin temperature','precipitation','windspeed','soil moisture']
@@ -17,8 +26,6 @@ var_binsize = [2, 2, 0.5,0.4,10]
 
 reg_shortname = ["alaska","canada","fscand","wsib","esib","us","ea","eu","arc","afr","sam","sane","china","india","land"]
 reg_longname = ["Alaska", "Canada", "Fennoscandia", "West Siberia", "East Siberia","USA","East Asia","Europe","Arctic","Africa","South America","Scandinavia","China", "India","Global land areas"]
-spring_regions = [0,1,2,3,4]
-autumn_regions = [0,1,2,3,4] 
 
 season_longname = ["spring", "summer", "autumn", "winter"]
 season_shortname = ["MAM", "JJA", "SON", "DJF"]
@@ -26,6 +33,7 @@ season_shortname = ["MAM", "JJA", "SON", "DJF"]
 colors = sns.color_palette("colorblind")[:6]
 labels = ["Preindustrial",r"+1$^{\circ}$C",r"+1.5$^{\circ}$C",r"+2$^{\circ}$C",r"+3$^{\circ}$C","+4$^{\circ}$C"]
 
+#-------------------------------------------------------------------------------------------------------
 
 for var in range(len(var_shortname)):
 

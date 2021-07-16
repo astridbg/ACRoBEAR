@@ -5,10 +5,12 @@ import seaborn as sns
 from getGWLdata import getGWLdata
 plt.rcParams.update({'font.size': 20})
 
+# This is a program to plot the mean yearly cycle of different variables,
+# including the min and max values.
 
 #-Variable specifications------------------------------------------------------------------
 
-model = "CanESM5"               # Which model are you using+
+model = "CanESM5"               # Which model are you using?
 scenario = "585"                # Which shared socio-economic pathway are you using?
 GWLs = [0, 1, 1.5, 2, 3, 4]     # Which global warmning levels are you using?
 var_list = [0]                  # Which variables are you using (indices of var_shortname)?

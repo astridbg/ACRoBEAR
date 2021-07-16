@@ -7,10 +7,15 @@ from getGWLdata import getGWLdata
 from extremeIndices import CDD,TX90p,WSDI
 plt.rcParams.update({'font.size': 28})
 
-model = "MPI-ESM1-2-LR"
-scenario = "585"
-GWLs = [0, 1, 1.5, 2, 3, 4]
-var_list = [0]
+
+#-Variable specifications----------------------------------------------------------------
+
+model = "MPI-ESM1-2-LR"         # Which model are you using?
+scenario = "585"                # Which shared socio-economic pathway are you using?
+GWLs = [0, 1, 1.5, 2, 3, 4]     # Which global warming levels are you using?
+var_list = [3]                  # Which indices are you using (indices of var_shortname)?
+
+#----------------------------------------------------------------------------------------
 
 var_shortname = ['tas','ts','pr','abswind','mrso','CDD','TX90p','WSDI']
 d = "daily"; D = "Daily"
@@ -33,6 +38,7 @@ season_shortname = ["MAM", "JJA", "SON", "DJF"]
 colors = sns.color_palette("colorblind")[:6]
 labels = ["Preindustrial",r"+1$^{\circ}$C",r"+1.5$^{\circ}$C",r"+2$^{\circ}$C",r"+3$^{\circ}$C","+4$^{\circ}$C"]
 
+#----------------------------------------------------------------------------------------
 
 for var in var_list:
 

@@ -5,11 +5,15 @@ import xarray as xr
 import seaborn as sns
 plt.rcParams.update({'font.size': 22})
 
-model = "CanESM5"
-hlines = True
-scenario = "126"
-GWLs = [0, 1, 1.5,2,3]
-after2070 = False
+#-Variable specifications----------------------------------------------------------------------------------
+
+model = "CanESM5"       # Which model are you using?
+scenario = "126"        # Which shared socio-economic pathway are you using?
+GWLs = [0, 1, 1.5,2,3]  # Which global warming level are you using?
+hlines = True           # Do you want to include horizontal lines marking the GWL for each ensemble member?
+after2070 = False       # Do you want to mark the GWL 1.5 only after 2070?
+
+#----------------------------------------------------------------------------------------------------------
 
 gmst = xr.open_dataset("../outputdata/gmst_"+model+"_ssp"+scenario+".nc")
 
@@ -79,9 +83,15 @@ plt.ylabel("Surface temperature change")
 plt.grid()
 plt.legend(loc="upper left")
 plt.ylim([-0.5,8.5])
-if scenario == "126" and after2070 == True: 
-    plt.savefig("../figures/GMST/gmst_hlines_"+model+"_ssp"+scenario+"_after2070.png")
-else:
-    plt.savefig("../figures/GMST/gmst_hlines_"+model+"_ssp"+scenario+".png")
 
+if hlines = True:
+    if scenario == "126" and after2070 == True: 
+        plt.savefig("../figures/GMST/gmst_hlines_"+model+"_ssp"+scenario+"_after2070.png")
+    else:
+        plt.savefig("../figures/GMST/gmst_hlines_"+model+"_ssp"+scenario+".png")
+else:
+    if scenario == "126" and after2070 == True:
+        plt.savefig("../figures/GMST/gmst__"+model+"_ssp"+scenario+"_after2070.png")
+    else:
+        plt.savefig("../figures/GMST/gmst_"+model+"_ssp"+scenario+".png")
 
