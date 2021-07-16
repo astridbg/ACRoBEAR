@@ -9,7 +9,11 @@
 - A script that calculates the daily Fire Weather Index given a dataset of daily temperature, relative humidity, windspeed and precipitation. 
 
 ### calcGMST.py
-- A script that calculates the global annual mean surface temperature for a given scenario. Gives a time series of both historical and scenario years. 
+- A script that calculates the global annual mean surface temperature for a given scenario. Gives a time series of both historical and scenario years.
+
+## Functions
+
+## Plotting functions
 
 
 
