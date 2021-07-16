@@ -11,10 +11,10 @@ In the /ACRoBEAR/ and /OtherRegions/ folders you find the following folders:
 
 #### /annualCycles/
 - Containing the folders:
-####     * /MeanMinMaxCycles/ 
-   - Containing annual cycles for a variable averaged over ensemble members and with minimum and maximum values for two warming levels. From plotCycle.py.
-####     * /PDFCycles/
-   - Containing annual cycles of probability density for different values of a variable, with all warming levels grouped together. From plotcyclePDF.py.
+* /MeanMinMaxCycles/ 
+   * Containing annual cycles for a variable averaged over ensemble members and with minimum and maximum values for two warming levels. From plotCycle.py.
+* /PDFCycles/
+   * Containing annual cycles of probability density for different values of a variable, with all warming levels grouped together. From plotcyclePDF.py.
       
 #### /individualPDFs/ 
 - Containing PDFs for individual regions and variables. Mother plot no longer exists.
