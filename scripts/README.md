@@ -43,6 +43,22 @@
 
 ## Plotting programs
 
+#### plotGMST.py
+- Plots the global mean surface temperature for different scenarios and models. Plots found in /figures/GMST/
+
+#### plotCycle.py
+- Plots the annual cycle, averaged over ensemble members and years in GWLs, for preindustrial climate and +2 degC climate. Also plots minimum and maximum values in each warming level. Plots found in /figures/*insert region*/annualCycles/MeanMinMaxCycles/
+  
+#### plotcyclePDF.py
+- Plots the probability density of different variable values for each days, for all warming levels group together in one plot. Plots found in /figures/*insert region*/annualCycles/PDFCycles/
+
+#### plotSingleScenarioPDF.py
+#### plotDoubleScenarioPDF.py
+#### plotMonthProb.py
+#### plotPDFchange_meanStd.py
+#### plotPDFchange_varOverlap.py
+#### plotSummary.py
+
 
 
 
