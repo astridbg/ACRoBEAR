@@ -35,10 +35,13 @@
 - A script that calculates the global annual mean surface temperature for a given scenario and model. Gives a time series of both historical and scenario years.
 
 #### calcRegAvg.py
-- A script that calculates the 
+- A script that calculates the regional average for a daily variable in a given region using the cleaned data from cleanField.py and the weighted region masks from calcAreagrid.py. Produces files in /outputdata/ for each variable, each scenario, each model and each warming level. The warming levels are found using the global mean surface temperature data from calcGMST.py. Can specify whether "after2070=True", which is relevant for SSP126 on GWL 1.5 degC in MPI-ESM1-2-LR to check reversibility. 
+
+#### calcPDFchange.py
+- A script that find the probability density function (PDF) values of the different variables and calculate changes in the PDF, including overlap area change, mean change, and standard deviation change (in respect to preindustrial climate). Stores the data in /outputdata/.
 
 
-## Plotting functions
+## Plotting programs
 
 
 
