@@ -53,12 +53,22 @@
 - Plots the probability density of different variable values for each days, for all warming levels group together in one plot. Plots found in /figures/*insert region*/annualCycles/PDFCycles/
 
 #### plotSingleScenarioPDF.py
-#### plotDoubleScenarioPDF.py
-#### plotMonthProb.py
-#### plotPDFchange_meanStd.py
-#### plotPDFchange_varOverlap.py
-#### plotSummary.py
+- Plots the PDF for variable in a single scenario, with the different warming levels together. Regions grouped together five and five. Plots found in /figures/*insert region*/allregionsPDF/singleScenario/
 
+#### plotDoubleScenarioPDF.py
+- Plots the PDF for variable in with different scenario and/or different models, with the different warming levels together. Regions grouped together five and five. Plots found in /figures/*insert region*/allregionsPDF/compareScenario/
+
+#### plotMonthProb.py
+- Plots the PDF for variable for a regio in spring or autumn season, with season divided up into months. Plots found in /figures/*insert region*/monthlyPDF/
+
+#### plotPDFchange_meanStd.py
+- Plots scatter plot for change in PDF of variable, for mean and standard deviation change. Plots found in /figures/*insert region*/PDFchange/
+
+#### plotPDFchange_varOverlap.py
+- Plots scatter plot of the change in overlap area for one variable compared to another variable. Plots found in /figures/*insert region*/PDFchange/
+
+#### plotSummary.py
+- Plots a table of all variables for all area and three different GWL, with colors strengt marking how much displaced the PDF has become for the warming and color (red/blue) marking the spread change of the variable (positive/negative). Plots found in /figures/*insert region*/summaryFigs/
 
 
 
