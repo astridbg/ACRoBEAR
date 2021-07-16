@@ -12,19 +12,19 @@ In the /ACRoBEAR/ and /OtherRegions/ folders you find the following folders:
 #### /annualCycles/
 - Containing the folders:
 #### - /MeanMinMaxCycles/ 
-     - Containing annual cycles for a variable averaged over ensemble members and with minimum and maximum values for two warming levels. From plotCycle.py.
+   - Containing annual cycles for a variable averaged over ensemble members and with minimum and maximum values for two warming levels. From plotCycle.py.
 #### - /PDFCycles/
-      - Containing annual cycles of probability density for different values of a variable, with all warming levels grouped together. From plotcyclePDF.py.
+   - Containing annual cycles of probability density for different values of a variable, with all warming levels grouped together. From plotcyclePDF.py.
       
 #### /individualPDFs/ 
 - Containing PDFs for individual regions and variables. Mother plot no longer exists.
 
 #### /monthlyPDFs/
 - Containing PDFs for individual seasons (for a variable and region) divided up into months. From plotMonthProb.py
-- 
+
 #### /PDFchange/
 - Containing different measures for how the PDF has changed, boht through displacement in overlap area from preindustrial climate (dispment) and changes in mean and standard deviation of the PDF (pdfchange). From plotPDFchange_meanStd.py and plotPDFchange_varOverlap.py
-- 
+ 
 #### /summaryFigs/
 - Containing tables of all variables for all area and three different GWL, with colors strengt marking how much displaced the PDF has become for the warming and color (red/blue) marking the spread change of the variable (positive/negative). From plotSummary.py
 
