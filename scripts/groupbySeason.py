@@ -1,6 +1,15 @@
 import xarray as xr
 
+# These are functions that group data based on seasons.
+# They are specify to group into three and three months.
+# The groupBySeason function groups one dataset into seasons,
+# while the groupManybySeason function takes dataset with different
+# global warming levels (GWL) and groups into different season
+# datasets with all GWLs together in one.
+
 def groupbySeason(ds):
+    
+    # Season start and end dates
 
     DJF_start2 = 0; DJF_stop2 = 59
     MAM_start = DJF_stop2; MAM_stop = 151
@@ -35,4 +44,5 @@ def groupManybySeason (ds_list):
 
 
     return MAM, JJA, SON, DJF
+
 

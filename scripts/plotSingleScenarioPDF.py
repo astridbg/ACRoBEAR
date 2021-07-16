@@ -10,12 +10,15 @@ plt.rcParams.update({'font.size': 28})
 model = "MPI-ESM1-2-LR"
 scenario = "585"
 GWLs = [0, 1, 1.5, 2, 3, 4]
+var_list = [0]
 
 var_shortname = ['tas','ts','pr','abswind','mrso','CDD','TX90p','WSDI']
-var_longname = ['temperature','skin temperature','precipitation','windspeed','soil moisture','consecutive dry days','warm days','warm spell duration']
+d = "daily"; D = "Daily"
+var_longname = [d+' temperature',d+' skin temperature',d+' precipitation',d+' windspeed',d+' soil moisture','consecutive dry days','warm days','warm spell duration']
+var_Longname = [D+' temperature',D+' skin temperature',D+' precipitation',D+' windspeed',D+' soil moisture','Consecutive dry days','Warm days','Warm spell duration']
 var_unit = ['$^{\circ}$C','$^{\circ}$C','mm d$^{-1}$','m s$^{-1}$','kg m$^{-2}$','d','%','d']
 var_xlim = [[[-50,50],[-40,40],[-20,50]],[[-50,50],[-40,40],[-20,50]],[[0,10],[0,10],[0,10]],[[0,8],[0,8],[0,8]],[[200,1750],[450,1300],[250,1250]]]
-var_binsize = [2, 2, 0.5,0.4,10,1,2,1]
+var_binsize = [2, 2, 0.5,0.4,10,5,4,2]
 
 reg_shortname = ["alaska","canada","fscand","wsib","esib","us","ea","eu","arc","afr","sam","sane","china","india","land"]
 reg_longname = ["Alaska", "Canada", "Fennoscandia", "West Siberia", "East Siberia","USA","East Asia","Europe","Arctic","Africa","South America","Scandinavia","China", "India","Global land areas"]
@@ -31,7 +34,7 @@ colors = sns.color_palette("colorblind")[:6]
 labels = ["Preindustrial",r"+1$^{\circ}$C",r"+1.5$^{\circ}$C",r"+2$^{\circ}$C",r"+3$^{\circ}$C","+4$^{\circ}$C"]
 
 
-for var in range(6,8):
+for var in var_list:
 
     GWL_data = getGWLdata(var_shortname[var], model, scenario, GWLs)
 
@@ -78,7 +81,7 @@ for var in range(6,8):
 
         for i in range(len(seasons)):
                 
-            fig.suptitle("SSP"+scenario+" PDFs of daily "+var_longname[var]+" in "+season_longname[i]+" ("+season_shortname[i]+")", fontsize=32)
+            fig.suptitle("SSP"+scenario+" PDFs of "+var_longname[var]+" in "+season_longname[i]+" ("+season_shortname[i]+")", fontsize=32)
             f = 1
 
             for region in region_list:
@@ -101,7 +104,8 @@ for var in range(6,8):
                     area = np.sum(np.diff(bins)*density)
                     print("Area under graph: ", area)
 
-                plt.xlabel(r"Daily "+var_longname[var]+" ["+var_unit[var]+"]")
+                plt.xlabel(var_longname[var]+r" ["+var_unit[var]+"]")
+                plt.ylabel("Probability density")
                 plt.xlim(xlims)
 
                 f += 1

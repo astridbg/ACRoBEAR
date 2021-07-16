@@ -28,6 +28,8 @@ def makeAreagrid(lon_values, lat_values, mf=[]):
                 areafracgrid[j,i] = np.nan
 
     r_mask = areafracgrid * mf
+    
+    # Return mask weighted with area fraction
 
     return r_mask 
 

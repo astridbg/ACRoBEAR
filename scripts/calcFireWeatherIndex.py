@@ -1,4 +1,52 @@
+# Courtesy of: Y. Wang, K.R. Anderson, and R.M. Suddaby (2015) // Canadian Forest Service
+# More information: https://d1ied5g1xfgpx8.cloudfront.net/pdfs/36461.pdf
+
+# Explanations:
+# BUI = Buildup Index.
+# FWI = Fire Weather Index.
+# FFMC = Fine Fuel Moisture Code.
+# DMC = Duff Moisture Code.
+# DC = Drought Code.
+# ISI = Initial Spread Index
+
 import math
+
+def main():
+    #-Variable specifications---------------------------------------------------------------------------------------------------------------
+    ffmc0 = 85.0                        # Initial fine fuel moisture code
+    dmc0 = 6.0                          # Initial duff moisture code
+    dc0 = 15.0                          # Initial drought code
+
+    infile = open('data.txt','r')       # Dataset containing || month | day | temperature | relative humidity | windspeed | precipitation ||
+    outfile = open('fwioutput.txt','w')
+    #---------------------------------------------------------------------------------------------------------------------------------------
+    try:
+        for line in infile:
+            mth,day,temp,rhum,wind,prcp=[float(field) for field in line.strip().lstrip('[').rstrip(']').split()]
+
+
+            if rhum>100.0:
+                rhum = 100.0
+            mth = int(mth)
+
+            fwisystem = FWICLASS(temp,rhum,wind,prcp)
+
+            ffmc = fwisystem.FFMCcalc(ffmc0)
+            dmc = fwisystem.DMCcalc(dmc0,mth)
+            dc = fwisystem.DCcalc(dc0,mth)
+            isi = fwisystem.ISIcalc(ffmc)
+            bui = fwisystem.BUIcalc(dmc,dc)
+            fwi = fwisystem.FWIcalc(isi,bui)
+
+            ffmc0 = ffmc
+            dmc0 = dmc
+            dc0 = dc
+            outfile.write("%s %s %s %s %s %s\n" % (str(ffmc),str(dmc),str(dc),str(isi),str(bui),str(fwi)))
+
+    finally:
+        infile.close()
+        outfile.close()
+
 
 class FWICLASS:
     def __init__(self,temp,rhum,wind,prcp):
@@ -116,41 +164,6 @@ class FWICLASS:
         else:
             fwi = math.exp(2.72 * (0.434*math.log(bb))**0.647)
         return fwi
-
-def main():
-    ffmc0 = 85.0
-    dmc0 = 6.0
-    dc0 = 15.0
-
-    infile = open('data.txt','r')
-    outfile = open('fwioutput.txt','w')
-    
-    try:
-        for line in infile:
-            mth,day,temp,rhum,wind,prcp=[float(field) for field in line.strip().lstrip('[').rstrip(']').split()]
-            
-            
-            if rhum>100.0:
-                rhum = 100.0
-            mth = int(mth)
-
-            fwisystem = FWICLASS(temp,rhum,wind,prcp)
-
-            ffmc = fwisystem.FFMCcalc(ffmc0)
-            dmc = fwisystem.DMCcalc(dmc0,mth)
-            dc = fwisystem.DCcalc(dc0,mth)
-            isi = fwisystem.ISIcalc(ffmc)
-            bui = fwisystem.BUIcalc(dmc,dc)
-            fwi = fwisystem.FWIcalc(isi,bui)
-
-            ffmc0 = ffmc
-            dmc0 = dmc
-            dc0 = dc
-            outfile.write("%s %s %s %s %s %s\n" % (str(ffmc),str(dmc),str(dc),str(isi),str(bui),str(fwi)))
-
-    finally:
-        infile.close()
-        outfile.close()
 
 main()
 

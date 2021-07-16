@@ -5,10 +5,17 @@ import seaborn as sns
 from getGWLdata import getGWLdata
 plt.rcParams.update({'font.size': 25})
 
-model = "CanESM5"
-scenario = "585"
-GWLs = [0, 1, 1.5, 2, 3, 4]
+# This program plots probability density for a given variable for each day of the year, 
+# for different warming levels.
 
+#-Variable specifications----------------------------------------------------------------
+
+model = "MPI-ESM1-2-LR"         # Which model are you using?
+scenario = "585"                # Which shared socio-economic pathway are you using?
+GWLs = [0, 1, 1.5, 2, 3, 4]     # Which global warming levels are you using?
+var_list = [3]                  # Which indices are you using (indices of var_shortname)?
+
+#----------------------------------------------------------------------------------------
 var_shortname = ['tas','ts','pr','tdiff']
 var_longname = ['Surface temperature',"Skin temperature",'Precipitation',r'$\Delta$(T$_{skin}$ - T$_{surface \: air}$']
 var_unit = ['$^{\circ}$C','$^{\circ}$C','mm d$^{-1}$','$^{\circ}$C']
@@ -18,12 +25,11 @@ reg_longname = ["Alaska", "Canada", "Fennoscandia", "West Siberia", "East Siberi
 
 colors = sns.color_palette("colorblind")[:6]
 titles = ["Preindustrial",r"+1$^{\circ}$C warming",r"+1.5$^{\circ}$C warming",r"+2$^{\circ}$C warming",r"+3$^{\circ}$C warming","+4$^{\circ}$C warming"]
+#-----------------------------------------------------------------------------------------
 
-
-for var in range(3):
+for var in var_list:
 
     GWL_data = getGWLdata(var_shortname[var], model,scenario, GWLs)
-    print("Data collected")
 
     dayofyear = GWL_data[0].dayofyear
     nyears = len(GWL_data[0].year)
@@ -36,21 +42,16 @@ for var in range(3):
 
     for region in range(nreg):
        
-        if var_shortname[var] == 'tbiff':
-            ymin = -1
-            ymax = 2
+        ymin = np.min(GWL_data[0].isel(region=region))
+        ymax = np.max(GWL_data[0].isel(region=region))
         
-        else:
-            ymin = np.min(GWL_data[0].isel(region=region))
-            ymax = np.max(GWL_data[0].isel(region=region))
-        
-            for l in range(1,len(GWL_data)):
-                tempmin = np.min(GWL_data[l].isel(region=region))
-                tempmax = np.max(GWL_data[l].isel(region=region))
-                if tempmin < ymin:
-                    ymin = tempmin
-                if tempmax > ymax:
-                    ymax = tempmax
+        for l in range(1,len(GWL_data)):
+            tempmin = np.min(GWL_data[l].isel(region=region))
+            tempmax = np.max(GWL_data[l].isel(region=region))
+            if tempmin < ymin:
+                ymin = tempmin
+            if tempmax > ymax:
+                ymax = tempmax
 
         fig.suptitle(reg_longname[region])
         f = 1
@@ -78,4 +79,3 @@ for var in range(3):
         
         plt.clf()
         
-        print("Data plotted")
