@@ -6,3 +6,5 @@ Our goal has been to quantify the changes in daily variability in climate variab
 For this project, we have considered regions in Alaska, Canada, Fennoscandia, West Siberia and East Siberia. However, we have also applied our methods to other parts of the world. The latitude and longitude values of the regions we have used can be found in the program /scripts/calcAreagrid.py
 
 We have also adapted a program from the Canadian Forest Service which calculates the daily Fire Weather Index, given daily temperature, relative humidity, windspeed and precipitation. This program can be found in the folder /fwiModel/, along with some test data.
+
+The CMIP6 data used in the analysis, as well as datasets of the processed data, can be found on the cic-qbo server under /storage/no-backup/users/astridbg/. Here you can find the CMIP6 data in the folder /CMIP6/. Most of the files there are soft links to dataset located elsewhere, but (NB!) I have streamlined the file names a bit simplify the analysis programs. In the folder /outputdata/ you can find the outputdata from different steps of the analysis.
