@@ -71,7 +71,6 @@
 - Plots a table of all variables for all area and three different GWL, with colors strengt marking how much displaced the PDF has become for the warming and color (red/blue) marking the spread change of the variable (positive/negative). Plots found in /figures/*insert region*/summaryFigs/
 
 ## Workflow
-This is a short description of how we end up with the probability density functions. 
 #### Postprocessing of the CMIP6 data
 The CMIP6 data can be postprocessed (checked for missing data, which is then standardised) in two ways - using *gv3.py* or *cleanField.py*. The gv3.py function postprocesses a single timestep of data while also averaging that timestep over a given region. The cleanField.py program, however, takes a model and a scenario as input, checks the historical run of the model as well as the scenario run, and concatenates the historical and scenario data into one big dataset. If you are making regional averages over many datasets, the cleanField.py program is considerably faster to use beforehand. The program requires that the name of the CMIP6 file is on the form variablename_day_modelname_simulationname_r*i1p1f1_years.nc. In the cic-qbo server under /CMIP6/ you can find the soft links to the CMIP6 datasets with names on this form. 
 
