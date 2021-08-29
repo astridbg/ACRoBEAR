@@ -23,7 +23,7 @@
 #### findOverlap.py
 - A function that finds the overlapping area between two curves, given the x and y values of the two curves.
 
-## Calculation scripts
+### Calculation scripts
 
 #### cleanField.py
 - A script that checks all ensemble members of a given model variable for both historical years and the years in a given scenario for missing values. Replaces missing values with NaN. Partly replaces gv3.py. Combines the historical and scenario years into one time series, and concatenates together all ensemble member into one big data file that is stored /outputdata/.
@@ -41,7 +41,7 @@
 - A script that find the probability density function (PDF) values of the different variables and calculate changes in the PDF, including overlap area change, mean change, and standard deviation change (in respect to preindustrial climate). Stores the data in /outputdata/.
 
 
-## Plotting programs
+### Plotting programs
 
 #### plotGMST.py
 - Plots the global mean surface temperature for different scenarios and models. Plots found in /figures/GMST/
@@ -70,5 +70,5 @@
 #### plotSummary.py
 - Plots a table of all variables for all area and three different GWL, with colors strengt marking how much displaced the PDF has become for the warming and color (red/blue) marking the spread change of the variable (positive/negative). Plots found in /figures/*insert region*/summaryFigs/
 
-
+## Workflow
 
